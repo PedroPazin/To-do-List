@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>app name</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <div class="app">
+        <button id="" onclick="openModal()">Create Task</button>
+
+        <div class="task-list"></div>
+
+        <div class="task-modal">
+            <form id="taskForm">
+                <label>
+                    Task
+                    <input type="text" id="title" required />
+                </label>
+
+                <label>
+                    <input type="checkbox" id="deadlineCheck">
+                    Deadline
+                </label>
+
+                <input type="date" id="deadlineDate">
+
+                <label>
+                    <input type="checkbox" id="dailyCheck">
+                    Daily
+                </label>
+
+                <button type="button" id="cancelBtn" onclick="closeModal()">Cancel</button> 
+                <button type="submit">Create</button>
+
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
