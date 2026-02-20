@@ -1,5 +1,6 @@
 const modal = document.querySelector(".task-modal");
 const form = document.getElementById("taskForm");
+const deadlineDateInput = document.getElementById("deadlineDate");
 
 function openModal() {
     modal.classList.add("open");
@@ -10,18 +11,22 @@ function closeModal() {
     form.reset();
 }
 
+function showDeadlineDate() {
+    deadlineDateInput.classList.toggle("open");
+}
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    createTask(e);    
+    createTask(e);
     closeModal();
-})
+});
 
 class Task {
-    constructor(title, hasDeadline, deadlineDate, isDaily) {
+    constructor(title, description, hasDeadline, deadlineDate, isDaily) {
         this.id = crypto.randomUUID();
         this.title = title;
+        this.description = description;
         this.hasDeadline = hasDeadline;
         this.deadlineDate = deadlineDate;
         this.isDaily = isDaily;
@@ -30,18 +35,34 @@ class Task {
     }
 }
 
-let tasks = []
+let tasks = [];
 
 function createTask(e) {
     const title = e.target[0].value;
-    const hasDeadline = e.target[1].checked;
-    const deadlineDate = e.target[2].value;
-    const isDaily = e.target[3].checked;
+    const description = e.target[1].value;
+    const hasDeadline = e.target[2].checked;
+    const deadlineDate = e.target[3].value;
+    const isDaily = e.target[4].checked;
 
-    const newTask = new Task(title, hasDeadline, deadlineDate, isDaily)
+    const newTask = new Task(
+        title,
+        description,
+        hasDeadline,
+        deadlineDate,
+        isDaily,
+    );
 
-    tasks.push(newTask)
-    console.log(tasks);
+    tasks.push(newTask);
+    renderTasks();
+}
+
+function deleteTask(taskId) {
+    tasks.forEach((task, index) => {
+        if ((taskId == task.id)) {
+            tasks.splice(index, 1);
+        }
+    });
+
     renderTasks();
 }
 
@@ -49,28 +70,43 @@ function renderTasks() {
     const container = document.querySelector(".task-list");
     container.innerHTML = "";
 
-    tasks.forEach(task => {
+    tasks.forEach((task) => {
         const taskDiv = document.createElement("div");
         taskDiv.classList.add("task");
 
         const title = document.createElement("h1");
-        title.textContent = "Task:" + task.title;
+        title.textContent = task.title;
+
+        const description = document.createElement("p");
+        description.classList.add("description");
+        description.textContent = task.title;
 
         const deadlineDate = document.createElement("span");
         deadlineDate.textContent = formatDate(task.deadlineDate);
 
+        const deleteButton = document.createElement("button");
+        deleteButton.classList.add("deleteButton");
+        deleteButton.innerHTML = "Delete";
+        deleteButton.addEventListener("click", () => {
+            deleteTask(task.id);
+        });
+
         taskDiv.appendChild(title);
-        taskDiv.appendChild(deadlineDate);
+        taskDiv.appendChild(description);
+        if (task.hasDeadline) {
+            taskDiv.appendChild(deadlineDate);
+        }
+        taskDiv.appendChild(deleteButton);
         container.appendChild(taskDiv);
-    })
+    });
 }
 
 function formatDate(dateString) {
-  const date = new Date(dateString);
+    const date = new Date(dateString);
 
-  return date.toLocaleDateString("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric"
-  });
+    return date.toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+    });
 }

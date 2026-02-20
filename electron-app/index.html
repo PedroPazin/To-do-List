@@ -16,16 +16,21 @@
         <div class="task-modal">
             <form id="taskForm">
                 <label>
-                    Task
+                    Title
                     <input type="text" id="title" required />
                 </label>
 
                 <label>
-                    <input type="checkbox" id="deadlineCheck">
-                    Deadline
+                    Description
+                    <input type="text" id="description" required />
                 </label>
 
+                <label>
+                    <input type="checkbox" id="deadlineCheck" onchange="showDeadlineDate()">
+                    Deadline
+                </label>
                 <input type="date" id="deadlineDate">
+
 
                 <label>
                     <input type="checkbox" id="dailyCheck">
